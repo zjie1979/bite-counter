@@ -7,13 +7,13 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="口口记">
-  <meta name="description" content="早餐、午餐、晚餐分别计数。每吃一口，轻轻记一下。">
+  <meta name="description" content="早餐、午餐、晚餐和加餐分别计数。每吃一口，轻轻记一下。">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=1">
-  <script src="./app.js?v=1" defer></script>
-  <title>口口记 · 三餐口数计数器</title>
+  <link rel="stylesheet" href="./styles.css?v=2">
+  <script src="./app.js?v=2" defer></script>
+  <title>口口记 · 三餐与加餐计数器</title>
 </head>
 <body>
   <div class="app">
@@ -24,12 +24,13 @@
     <p id="save-warning" class="save-warning" role="alert" hidden>暂时无法保存记录，请先导出备份，勿关闭页面。</p>
 
     <main>
-      <section id="page-counter" class="page" aria-label="三餐计数">
+      <section id="page-counter" class="page" aria-label="三餐与加餐计数">
         <div class="date-bar"><button class="icon-button" id="prev-date" aria-label="前一天">‹</button><label class="date-label"><strong id="date-label">今天</strong><span id="date-subtitle"></span><input type="date" id="record-date" aria-label="选择记录日期"></label><button class="icon-button" id="next-date" aria-label="后一天">›</button></div>
         <div class="meal-tabs" role="tablist" aria-label="选择餐次">
           <button class="meal-tab" id="meal-breakfast" role="tab" data-meal="breakfast"><span>早餐</span><strong id="mini-breakfast">0<span>口</span></strong><small id="status-breakfast">未记录</small></button>
           <button class="meal-tab" id="meal-lunch" role="tab" data-meal="lunch"><span>午餐</span><strong id="mini-lunch">0<span>口</span></strong><small id="status-lunch">未记录</small></button>
           <button class="meal-tab" id="meal-dinner" role="tab" data-meal="dinner"><span>晚餐</span><strong id="mini-dinner">0<span>口</span></strong><small id="status-dinner">未记录</small></button>
+          <button class="meal-tab" id="meal-snack" role="tab" data-meal="snack"><span>加餐</span><strong id="mini-snack">0<span>口</span></strong><small id="status-snack">未记录</small></button>
         </div>
         <div class="counter-card">
           <div class="counter-top"><span id="active-meal">早餐计数</span><button class="text-button" id="edit-count">修改口数 <span aria-hidden="true">↗</span></button></div>
@@ -38,22 +39,22 @@
           <button id="add-bite" class="add-bite" aria-label="吃了一口，加一口"><span class="plus" aria-hidden="true">＋</span><span>吃了一口</span><small>轻点一次，记 1 口</small></button>
           <div class="counter-actions"><button id="subtract-bite" class="secondary-button"><span aria-hidden="true">−</span> 减一口</button><button id="finish-meal" class="finish-button">这餐记好了 <span aria-hidden="true">✓</span></button></div>
         </div>
-        <div class="day-summary"><span>当日累计 <strong id="day-total">0</strong> 口</span><span id="meal-progress">0 / 3 餐已记好</span></div>
+        <div class="day-summary"><span>当日累计 <strong id="day-total">0</strong> 口</span><span id="meal-progress">0 项已记好</span></div>
         <p class="gentle-note" id="save-note">不用赶进度，照常吃，照实记。</p>
       </section>
 
       <section id="page-history" class="page history-page" aria-label="历史记录" hidden>
-        <div class="page-title"><div><p class="eyebrow">YOUR LITTLE RECORDS</p><h2>三餐小记</h2></div><span id="record-days" class="pill">0 天记录</span></div>
+        <div class="page-title"><div><p class="eyebrow">YOUR LITTLE RECORDS</p><h2>饮食小记</h2></div><span id="record-days" class="pill">0 天记录</span></div>
         <div class="week-card"><div class="section-heading"><strong>最近 7 天</strong><span>每天累计口数</span></div><div id="week-chart" class="week-chart" aria-label="最近七天口数"></div></div>
         <div class="section-heading history-heading"><strong>每日记录</strong><span>点一天，查看或补记</span></div>
         <div id="history-list" class="history-list"></div>
       </section>
 
       <section id="page-settings" class="page settings-page" aria-label="设置与备份" hidden>
-        <div class="page-title"><div><p class="eyebrow">MAKE IT YOURS</p><h2>设置与备份</h2></div><span class="pill">v1.0</span></div>
+        <div class="page-title"><div><p class="eyebrow">MAKE IT YOURS</p><h2>设置与备份</h2></div><span class="pill">v1.1</span></div>
         <div class="settings-card"><h3>放到 iPhone 主屏幕</h3><p>在 Safari 打开本页，点“分享”按钮，再选“添加到主屏幕”。</p><p class="muted">如从微信打开，请先选择“在 Safari 中打开”。</p></div>
         <div class="settings-card"><div class="section-heading"><h3>保留自己的记录</h3><span id="backup-count">0 天</span></div><p>数据只存在当前浏览器或主屏幕 App 中，换手机、清理网站数据前，请先导出。</p><div class="backup-actions"><button class="finish-button" id="export-data">导出备份 ↓</button><button class="secondary-button" id="import-data">导入备份 ↑</button></div><input id="import-file" type="file" accept="application/json,.json" hidden><p id="backup-status" class="muted" role="status"></p></div>
-        <div class="settings-card"><h3>按自己的节奏记录</h3><p>三餐分别计数；误点可减一口，也能直接修改总数。“这餐记好了”只标记完成，随时可以继续记。</p><p class="muted">这里不预设每餐口数上限，口数也不能直接换算成热量。</p></div>
+        <div class="settings-card"><h3>按自己的节奏记录</h3><p>三餐和加餐分别计数；误点可减一口，也能直接修改总数。“这餐记好了”只标记完成，随时可以继续记。一天内多次加餐，都累计在“加餐”中；没有加餐就留空。</p><p class="muted">这里不预设每餐口数上限，口数也不能直接换算成热量。</p></div>
         <p class="settings-footer">口口记 · 把每一口，轻轻记下来</p>
       </section>
     </main>

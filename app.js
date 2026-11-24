@@ -1,8 +1,8 @@
 (() => {
   'use strict';
   const KEY = 'koukouji.bites.v1';
-  const MEALS = ['breakfast', 'lunch', 'dinner'];
-  const NAMES = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐' };
+  const MEALS = ['breakfast', 'lunch', 'dinner', 'snack'];
+  const NAMES = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', snack: '加餐' };
   const $ = id => document.getElementById(id);
   const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const dateObject = key => { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d,12); };
@@ -89,7 +89,7 @@
     $('finish-meal').textContent = c.finished ? '这餐已记好 ✓' : '这餐记好了 ✓';
     $('counter-hint').textContent = c.finished ? '这一餐记好了，需要时可以继续记' : c.count === 0 ? '准备好了，就从第一口开始' : '每吃一口，轻轻点一下';
     $('day-total').textContent = total(selectedDate);
-    $('meal-progress').textContent = `${MEALS.filter(m => current(m).finished).length} / 3 餐已记好`;
+    $('meal-progress').textContent = `${MEALS.filter(m => current(m).finished).length} 项已记好`;
   }
   function renderHistory() {
     const dates = Object.keys(data.days).sort().reverse();
@@ -108,7 +108,7 @@
     $('history-list').replaceChildren();
     if (!dates.length) {
       const box = document.createElement('div'); box.className = 'empty-state';
-      box.innerHTML = '<div class="empty-icon" aria-hidden="true">◒</div><h3>从今天的第一口开始</h3><p>记录过的早餐、午餐和晚餐<br>都会好好留在这里。</p>';
+      box.innerHTML = '<div class="empty-icon" aria-hidden="true">◒</div><h3>从今天的第一口开始</h3><p>记录过的三餐和加餐<br>都会好好留在这里。</p>';
       $('history-list').append(box); return;
     }
     for (const date of dates) {
@@ -166,7 +166,7 @@
     try {
       pendingImport=validate(JSON.parse(await file.text()));
       const dates=Object.keys(pendingImport.days); const meals=dates.reduce((n,d)=>n+Object.keys(pendingImport.days[d]).length,0);
-      if (!dates.length) throw new Error('备份中没有三餐记录。');
+      if (!dates.length) throw new Error('备份中没有餐次记录。');
       $('import-preview').textContent=`检测到 ${dates.length} 天、${meals} 餐记录。确认导入到这台设备吗？`;
       $('import-dialog').showModal();
     } catch (error) { pendingImport=null; toast(error.message.startsWith('备份')?error.message:'文件无法读取，请选择口口记导出的备份。'); }
