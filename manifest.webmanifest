@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "口口记 · 三餐口数计数器",
+  "short_name": "口口记",
+  "description": "早餐、午餐、晚餐分别计数。每一口，都有记录。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f5ef",
+  "theme_color": "#f7f5ef",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
